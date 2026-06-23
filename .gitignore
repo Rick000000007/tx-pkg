@@ -1,0 +1,11 @@
+# Build output
+pkg
+
+# Object files
+*.o
+
+# Logs
+*.log
+
+# Temporary files
+*~
