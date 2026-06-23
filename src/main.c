@@ -23,6 +23,8 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    /* pkg update */
+
     if (strcmp(argv[1], "update") == 0) {
 
         printf("TX Package Manager\n");
@@ -41,31 +43,85 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    /* pkg search */
+
     if (strcmp(argv[1], "search") == 0) {
-        printf("Search is not implemented yet.\n");
+
+        printf("TX Package Manager\n");
+        printf("==================\n\n");
+
+        if (argc < 3) {
+            printf("Usage: pkg search <package>\n");
+            return 1;
+        }
+
+        printf("Searching for: %s\n\n", argv[2]);
+
+        char command[512];
+
+        snprintf(
+            command,
+            sizeof(command),
+            "grep -i \"%s\" ~/.cache/tx-pkg/Packages.json",
+            argv[2]
+        );
+
+        system(command);
+
         return 0;
     }
+
+    /* pkg info */
 
     if (strcmp(argv[1], "info") == 0) {
-        printf("Info is not implemented yet.\n");
+
+        printf("TX Package Manager\n");
+        printf("==================\n\n");
+
+        if (argc < 3) {
+            printf("Usage: pkg info <package>\n");
+            return 1;
+        }
+
+        printf("Package information:\n\n");
+
+        char command[512];
+
+        snprintf(
+            command,
+            sizeof(command),
+            "grep -A 5 -i \"\\\"name\\\": \\\"%s\\\"\" ~/.cache/tx-pkg/Packages.json",
+            argv[2]
+        );
+
+        system(command);
+
         return 0;
     }
+
+    /* pkg install */
 
     if (strcmp(argv[1], "install") == 0) {
-        printf("Install is not implemented yet.\n");
+        printf("Install command is not implemented yet.\n");
         return 0;
     }
+
+    /* pkg remove */
 
     if (strcmp(argv[1], "remove") == 0) {
-        printf("Remove is not implemented yet.\n");
+        printf("Remove command is not implemented yet.\n");
         return 0;
     }
 
+    /* pkg upgrade */
+
     if (strcmp(argv[1], "upgrade") == 0) {
-        printf("Upgrade is not implemented yet.\n");
+        printf("Upgrade command is not implemented yet.\n");
         return 0;
     }
 
     printf("Unknown command: %s\n", argv[1]);
+    printf("Run 'pkg' to see available commands.\n");
+
     return 1;
 }
