@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 static void usage(void)
 {
@@ -23,8 +24,20 @@ int main(int argc, char *argv[])
     }
 
     if (strcmp(argv[1], "update") == 0) {
-        printf("Updating TX repositories...\n");
-        printf("Done.\n");
+
+        printf("TX Package Manager\n");
+        printf("==================\n\n");
+
+        printf("Updating repository...\n\n");
+
+        system("mkdir -p ~/.cache/tx-pkg");
+
+        system("curl -L -o ~/.cache/tx-pkg/Packages.json https://rick000000007.github.io/tx-packages/repo/stable/Packages.json");
+
+        printf("\nRepository downloaded successfully.\n");
+        printf("Cache location:\n");
+        printf("~/.cache/tx-pkg/Packages.json\n");
+
         return 0;
     }
 
@@ -54,6 +67,5 @@ int main(int argc, char *argv[])
     }
 
     printf("Unknown command: %s\n", argv[1]);
-
     return 1;
 }
