@@ -59,3 +59,48 @@ int find_package_filename(
 
     return 0;
 }
+int find_package_sha256(const char *package,
+                        char *sha256,
+                        int size)
+{
+    char command[512];
+    char line[256];
+
+    snprintf(
+        command,
+        sizeof(command),
+        "grep -A 5 '\"name\": \"%s\"' ~/.cache/tx-pkg/Packages.json | grep '\"sha256\"'",
+        package
+    );
+
+    FILE *fp = popen(command, "r");
+    if (!fp)
+        return 0;
+
+    if (!fgets(line, sizeof(line), fp)) {
+        pclose(fp);
+        return 0;
+    }
+
+    pclose(fp);
+
+    char *start = strchr(line, ':');
+    if (!start)
+        return 0;
+
+    start++;
+
+    while (*start == ' ' || *start == '"' )
+        start++;
+
+    char *end = strchr(start, '"');
+    if (!end)
+        return 0;
+
+    *end = '\0';
+
+    strncpy(sha256, start, size - 1);
+    sha256[size - 1] = '\0';
+
+    return 1;
+}

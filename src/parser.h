@@ -8,5 +8,9 @@ int find_package_filename(
     char *filename,
     size_t size
 );
-
+int find_package_sha256(
+    const char *package,
+    char *sha256,
+    int size
+);
 #endif
