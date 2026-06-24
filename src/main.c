@@ -10,6 +10,7 @@
 #include "search.h"
 #include "info.h"
 #include "remove.h"
+#include "json.h"
 
 static void usage(void)
 {
@@ -29,7 +30,11 @@ static void usage(void)
 int main(int argc, char *argv[])
 {
     db_init();
-    if (argc < 2) {
+   if (argc == 2 && strcmp(argv[1], "json-test") == 0) {
+    json_test();
+    return 0;
+    }
+   if (argc < 2) {
         usage();
         return 0;
     }

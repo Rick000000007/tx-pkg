@@ -2,6 +2,8 @@
 #include <stdlib.h>
 
 #include "db.h"
+#include "json.h"
+#include <string.h>
 
 int db_init(void)
 {
@@ -19,25 +21,30 @@ int db_init(void)
 
 int db_add_package(const char *name)
 {
-    char command[512];
+    PackageDB db;
 
-    snprintf(
-        command,
-        sizeof(command),
-        "printf '{\n"
-        "  \"packages\": [\n"
-        "    {\"name\":\"%s\"}\n"
-        "  ]\n"
-        "}\n' > ~/.tx/var/lib/txpkg/installed.json",
-        name
-    );
+    if (!json_load(&db))
+        return 0;
 
-    system(command);
+    if (json_find_package(&db, name) >= 0)
+        return 1;
 
-    return 0;
+    if (db.count >= MAX_PACKAGES)
+        return 0;
+
+    strcpy(db.packages[db.count].name, name);
+    strcpy(db.packages[db.count].version, "1.37.0");
+    db.packages[db.count].release = 1;
+
+    db.count++;
+
+    return json_save(&db);
 }
+
 int db_remove_package(const char *name)
 {
+    (void)name;
+
     char command[512];
 
     snprintf(
@@ -52,20 +59,16 @@ int db_remove_package(const char *name)
 
     return 0;
 }
+
 int db_is_installed(const char *name)
 {
-    char command[512];
+    PackageDB db;
 
-    snprintf(
-        command,
-        sizeof(command),
-        "grep -q '\"name\":\"%s\"' ~/.tx/var/lib/txpkg/installed.json",
-        name
-    );
+    if (!json_load(&db))
+        return 0;
 
-    if (system(command) == 0)
+    if (json_find_package(&db, name) >= 0)
         return 1;
 
     return 0;
 }
-
