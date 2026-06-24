@@ -20,6 +20,10 @@ int json_find_package(
     PackageDB *db,
     const char *name
 );
+int json_remove_package(
+    PackageDB *db,
+    const char *name
+);
 
 void json_test(void);
 

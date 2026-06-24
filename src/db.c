@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "db.h"
 #include "json.h"
-#include <string.h>
 
 int db_init(void)
 {
@@ -11,12 +11,13 @@ int db_init(void)
 
     system(
         "if [ ! -f ~/.tx/var/lib/txpkg/installed.json ]; then "
-        "printf '{\n  \"packages\": []\n}\n' > "
-        "~/.tx/var/lib/txpkg/installed.json; "
+        "printf '{\n"
+        "  \"packages\": []\n"
+        "}\n' > ~/.tx/var/lib/txpkg/installed.json; "
         "fi"
     );
 
-    return 0;
+    return 1;
 }
 
 int db_add_package(const char *name)
@@ -43,21 +44,15 @@ int db_add_package(const char *name)
 
 int db_remove_package(const char *name)
 {
-    (void)name;
+    PackageDB db;
 
-    char command[512];
+    if (!json_load(&db))
+        return 0;
 
-    snprintf(
-        command,
-        sizeof(command),
-        "printf '{\n"
-        "  \"packages\": []\n"
-        "}\n' > ~/.tx/var/lib/txpkg/installed.json"
-    );
+    if (!json_remove_package(&db, name))
+        return 0;
 
-    system(command);
-
-    return 0;
+    return json_save(&db);
 }
 
 int db_is_installed(const char *name)
