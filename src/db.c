@@ -36,3 +36,19 @@ int db_add_package(const char *name)
 
     return 0;
 }
+int db_remove_package(const char *name)
+{
+    char command[512];
+
+    snprintf(
+        command,
+        sizeof(command),
+        "printf '{\n"
+        "  \"packages\": []\n"
+        "}\n' > ~/.tx/var/lib/txpkg/installed.json"
+    );
+
+    system(command);
+
+    return 0;
+}

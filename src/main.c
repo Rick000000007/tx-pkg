@@ -9,6 +9,7 @@
 #include "install.h"
 #include "search.h"
 #include "info.h"
+#include "remove.h"
 
 static void usage(void)
 {
@@ -63,11 +64,9 @@ int main(int argc, char *argv[])
         if (strcmp(argv[1], "list") == 0) {
         return pkg_list();
     }
-	if (strcmp(argv[1], "remove") == 0) {
-        printf("Remove command is not implemented yet.\n");
-        return 0;
+        if (strcmp(argv[1], "remove") == 0) {
+        return pkg_remove(argc, argv);
     }
-
     if (strcmp(argv[1], "upgrade") == 0) {
         printf("Upgrade command is not implemented yet.\n");
         return 0;
