@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
+
+#include "parser.h"
+#include "db.h"
+#include "list.h"
+#include "install.h"
+#include "search.h"
+#include "info.h"
 
 static void usage(void)
 {
@@ -12,12 +20,14 @@ static void usage(void)
     printf("  pkg search <package>\n");
     printf("  pkg info <package>\n");
     printf("  pkg install <package>\n");
+    printf("  pkg list\n");
     printf("  pkg remove <package>\n");
     printf("  pkg upgrade\n");
 }
 
 int main(int argc, char *argv[])
 {
+    db_init();
     if (argc < 2) {
         usage();
         return 0;
@@ -41,31 +51,30 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    if (strcmp(argv[1], "search") == 0) {
-        printf("Search is not implemented yet.\n");
-        return 0;
+        if (strcmp(argv[1], "search") == 0) {
+        return pkg_search(argc, argv);
     }
-
-    if (strcmp(argv[1], "info") == 0) {
-        printf("Info is not implemented yet.\n");
-        return 0;
+        if (strcmp(argv[1], "info") == 0) {
+        return pkg_info(argc, argv);
     }
-
-    if (strcmp(argv[1], "install") == 0) {
-        printf("Install is not implemented yet.\n");
-        return 0;
+        if (strcmp(argv[1], "install") == 0) {
+        return pkg_install(argc, argv);
     }
-
-    if (strcmp(argv[1], "remove") == 0) {
-        printf("Remove is not implemented yet.\n");
+        if (strcmp(argv[1], "list") == 0) {
+        return pkg_list();
+    }
+	if (strcmp(argv[1], "remove") == 0) {
+        printf("Remove command is not implemented yet.\n");
         return 0;
     }
 
     if (strcmp(argv[1], "upgrade") == 0) {
-        printf("Upgrade is not implemented yet.\n");
+        printf("Upgrade command is not implemented yet.\n");
         return 0;
     }
 
     printf("Unknown command: %s\n", argv[1]);
+    printf("Run 'pkg' to see available commands.\n");
+
     return 1;
 }
