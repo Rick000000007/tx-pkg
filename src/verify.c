@@ -4,40 +4,54 @@
 
 #include "verify.h"
 
-int verify_package(const char *package_file,
-                   const char *expected_sha256)
+int verify_package(
+    const char *package_file,
+    const char *expected_sha256)
 {
-    char actual[129];
-    char command[512];
+    char command[1024];
+    char actual[65];
+    FILE *fp;
+
+    if (!package_file || !expected_sha256)
+        return 0;
+
+    if (strlen(expected_sha256) == 0) {
+        printf("Repository does not provide SHA256.\n");
+        printf("Skipping verification.\n");
+        return 1;
+    }
 
     snprintf(
         command,
         sizeof(command),
-        "sha256sum %s | cut -d' ' -f1",
+        "sha256sum \"%s\"",
         package_file
     );
 
-    FILE *fp = popen(command, "r");
+    fp = popen(command, "r");
+
     if (!fp) {
-        printf("ERROR: Unable to calculate SHA256.\n");
+        printf("Unable to calculate SHA256.\n");
         return 0;
     }
 
-    if (!fgets(actual, sizeof(actual), fp)) {
+    if (fscanf(fp, "%64s", actual) != 1) {
         pclose(fp);
         return 0;
     }
 
     pclose(fp);
 
-    actual[strcspn(actual, "\n")] = 0;
+    if (strcmp(actual, expected_sha256) != 0) {
 
-    if (strcmp(actual, expected_sha256) == 0)
-        return 1;
+        printf("\nSHA256 verification FAILED!\n");
+        printf("Expected: %s\n", expected_sha256);
+        printf("Actual:   %s\n", actual);
 
-    printf("\nSHA256 verification failed.\n");
-    printf("Expected: %s\n", expected_sha256);
-    printf("Actual:   %s\n", actual);
+        return 0;
+    }
 
-    return 0;
+    printf("SHA256 verification PASSED.\n");
+
+    return 1;
 }

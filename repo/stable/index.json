@@ -1,0 +1,8 @@
+{
+  "repository": "TX Official Repository",
+  "version": 2,
+  "architecture": "aarch64",
+  "channel": "stable",
+  "packages": 1,
+  "generated": "2026-06-24"
+}
