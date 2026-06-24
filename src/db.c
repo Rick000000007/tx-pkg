@@ -52,3 +52,20 @@ int db_remove_package(const char *name)
 
     return 0;
 }
+int db_is_installed(const char *name)
+{
+    char command[512];
+
+    snprintf(
+        command,
+        sizeof(command),
+        "grep -q '\"name\":\"%s\"' ~/.tx/var/lib/txpkg/installed.json",
+        name
+    );
+
+    if (system(command) == 0)
+        return 1;
+
+    return 0;
+}
+

@@ -16,6 +16,11 @@ int pkg_install(int argc, char *argv[])
         return 1;
     }
 
+    if (db_is_installed(argv[2])) {
+        printf("Package '%s' is already installed.\n", argv[2]);
+        printf("Nothing to do.\n");
+        return 0;
+    }
     printf("Installing: %s\n\n", argv[2]);
 
     char filename[256];
