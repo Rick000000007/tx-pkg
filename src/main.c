@@ -15,6 +15,7 @@
 #include "upgrade.h"
 #include "stats.h"
 #include "txrepo.h"
+#include "txbuild.h"
 
 static void usage(void)
 {
@@ -31,6 +32,7 @@ static void usage(void)
     printf("  pkg doctor\n");
     printf("  pkg stats\n");
     printf("  pkg txrepo [path]\n");
+    printf("  pkg txbuild [path]\n");
     printf("  pkg upgrade\n");
 }
 
@@ -107,6 +109,15 @@ int main(int argc, char *argv[])
         path = argv[2];
 
     return txrepo_generate(path);
+    }
+    if (strcmp(argv[1], "txbuild") == 0) {
+
+    const char *path = "package-template";
+
+    if (argc >= 3)
+        path = argv[2];
+
+    return txbuild_package(path);
     }
     printf("Unknown command: %s\n", argv[1]);
     printf("Run 'pkg' to see available commands.\n");

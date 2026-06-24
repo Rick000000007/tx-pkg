@@ -1,0 +1,9 @@
+Package: hello
+Version: 1.0.0
+Release: 1
+Architecture: aarch64
+Category: demo
+Description: Hello World TX package
+Maintainer: TX Team
+Homepage: https://txterminal.dev
+License: MIT

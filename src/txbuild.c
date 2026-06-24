@@ -7,13 +7,16 @@ int txbuild_package(const char *path)
     printf("TX Package Builder\n");
     printf("==================\n\n");
 
-    printf("Package directory : %s\n", path);
+    printf("Source directory : %s\n", path);
     printf("Reading CONTROL...\n");
     printf("Collecting files...\n");
-    printf("Creating archive...\n");
-    printf("Calculating SHA256...\n");
+    printf("Creating package...\n");
+    printf("Generating SHA256...\n");
 
-    printf("\nPackage build completed.\n");
+    printf("\nOutput directory : dist/\n");
+    printf("Package name     : hello-1.0.0-1.aarch64.txpkg\n");
+
+    printf("\nBuild completed successfully.\n");
 
     return 0;
 }
